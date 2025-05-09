@@ -1,7 +1,8 @@
 import random
-from datetime import datetime, time
+from datetime import time
 
 from faker import Faker
+
 from models import Teacher, Student, Lesson, Review, LessonReport, Calendar, Subject, DifficultyLevel, db
 from server import app
 
@@ -41,7 +42,6 @@ def populate_difficulty_levels():
                 DifficultyLevel(id=4, name="Bachelor's"),
                 DifficultyLevel(id=5, name="Master's"),
             ]
-
 
             db.session.add_all(difficulty_levels)
             db.session.commit()
@@ -130,6 +130,7 @@ def populate_reviews(num):
         db.session.commit()
         print(f"{num} recenzji dodano do bazy danych.")
 
+
 def populate_reports(num):
     with app.app_context():
         lessons = Lesson.query.all()
@@ -173,6 +174,7 @@ def create_calendar(teacher_id, available_from, available_until, working_days):
         db.session.commit()
         print(f"Kalendarz dodano do bazy danych.")
 
+
 def create_teacher(subject_ids, difficulty_level_ids):
     # subject_ids - 1-13, difficulty_level_ids - 1-5
     with app.app_context():
@@ -189,6 +191,7 @@ def create_teacher(subject_ids, difficulty_level_ids):
         db.session.commit()
         print(f"Nauczyciel dodany do bazy danych.")
 
+
 def create_lesson(teacher_id, student_id, subject_id, difficulty_level_id):
     with app.app_context():
         teachers = Teacher.query.filter_by(teacher_id=teacher_id).all()
@@ -197,7 +200,6 @@ def create_lesson(teacher_id, student_id, subject_id, difficulty_level_id):
         if not teachers or not students:
             print("Brak nauczycieli lub studentów w bazie danych.")
             return
-
 
         teacher = teachers[0]
         student = students[0]
@@ -221,19 +223,16 @@ if __name__ == "__main__":
     num_records = 10
     populate_difficulty_levels()
     populate_subjects()
-    create_teacher([1,2,3],[1,3])
-    create_teacher([1,5,8],[2])
-    create_teacher([10],[2])
+    create_teacher([1, 2, 3], [1, 3])
+    create_teacher([1, 5, 8], [2])
+    create_teacher([10], [2])
     populate_teachers(num_records)
     populate_students(num_records)
-    create_lesson(1,1,1,1)
-    create_lesson(2,2,5,2)
-    create_lesson(3,3,10,2)
+    create_lesson(1, 1, 1, 1)
+    create_lesson(2, 2, 5, 2)
+    create_lesson(3, 3, 10, 2)
     populate_lessons(num_records)
     populate_reviews(num_records)
     populate_reports(num_records)
-    create_calendar(1,8,20,[1,3,4,5])
-    create_calendar(2,10,15,[1,2,3,4,5])
-
-
-
+    create_calendar(1, 8, 20, [1, 3, 4, 5])
+    create_calendar(2, 10, 15, [1, 2, 3, 4, 5])
