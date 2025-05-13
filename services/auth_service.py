@@ -12,18 +12,18 @@ class AuthService:
     @staticmethod
     def get_user(user_id):
         user = BaseUser.query.filter_by(id=user_id).first()
-        return credentials(user)
+        return AuthService.credentials(user)
 
     @staticmethod
     def update_admin(user_id, data):
         user = BaseUser.query.filter_by(id=user_id).first()
-        return updater(user, data)
+        return AuthService.updater(user, data)
 
     @staticmethod
     def updater_user(user, data):
         password = data['current_password']
         if user.check_password(password):
-            return self.updater(user, data)
+            return AuthService.updater(user, data)
         return jsonify({'error': 'Invalid password'}), 401  # ABORT
 
     @staticmethod
@@ -101,7 +101,7 @@ class AuthService:
                 db.session.add(new_user)
                 db.session.commit()
                 if is_test is True:
-                    check_auth_key(auth_key)
+                    AuthService.check_auth_key(auth_key)
                     return jsonify({"message": "Test account created successfully"}), 200
             except Exception as e:
                 return jsonify({"XD": f"{e}"}), 500
